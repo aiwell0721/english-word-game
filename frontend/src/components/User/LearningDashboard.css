@@ -1,0 +1,284 @@
+/* 学习管理仪表板样式 */
+
+.learning-dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+/* 顶部导航 */
+.learning-header {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+  padding: 30px;
+  border-radius: 12px;
+  color: white;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.learning-header h1 {
+  margin: 0 0 20px 0;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.view-tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.view-tab {
+  flex: 1;
+  min-width: 120px;
+  padding: 12px 20px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.view-tab:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.view-tab.active {
+  background: white;
+  color: #ff6b6b;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+/* 内容区域 */
+.learning-content {
+  min-height: 400px;
+}
+
+/* 概览面板 */
+.overview-panel {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.overview-card {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.overview-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ff6b6b 0%, #ee5a24 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.overview-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.overview-card:hover::before {
+  opacity: 1;
+}
+
+.card-icon {
+  font-size: 3.5em;
+  margin-bottom: 15px;
+}
+
+.overview-card h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #333;
+}
+
+.overview-card p {
+  margin: 0 0 15px 0;
+  font-size: 0.95em;
+  color: #666;
+  line-height: 1.6;
+}
+
+.card-arrow {
+  display: inline-block;
+  font-size: 1.2em;
+  color: #ff6b6b;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+
+.overview-card:hover .card-arrow {
+  transform: translateX(5px);
+}
+
+/* 学习小贴士 */
+.learning-tips {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid #ff6b6b;
+}
+
+.learning-tips h4 {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #ff6b6b;
+}
+
+.learning-tips ul {
+  list-style: none;
+  padding-left: 25px;
+  margin: 0;
+}
+
+.learning-tips li {
+  font-size: 1em;
+  color: #555;
+  line-height: 2;
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 10px;
+}
+
+.learning-tips li::before {
+  content: '💡';
+  position: absolute;
+  left: 0;
+  font-size: 1em;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .learning-dashboard {
+    padding: 10px;
+  }
+
+  .learning-header {
+    padding: 20px;
+  }
+
+  .learning-header h1 {
+    font-size: 1.5em;
+  }
+
+  .view-tabs {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .view-tab {
+    min-width: 100%;
+    padding: 10px 15px;
+  }
+
+  .overview-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .overview-card {
+    padding: 20px;
+  }
+
+  .card-icon {
+    font-size: 2.5em;
+  }
+
+  .learning-tips {
+    padding: 20px;
+  }
+}
+
+/* 加载状态 */
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 1.2em;
+  color: #666;
+}
+
+/* 动画效果 */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.view-tab,
+.overview-card {
+  animation: slideIn 0.3s ease;
+}
+
+/* 渐变背景动画 */
+.view-tab:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.view-tab:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.view-tab:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.view-tab:nth-child(4) {
+  animation-delay: 0.2s;
+}
+
+.overview-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.overview-card:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.overview-card:nth-child(3) {
+  animation-delay: 0.2s;
+}

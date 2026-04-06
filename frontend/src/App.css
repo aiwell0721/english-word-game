@@ -1,0 +1,54 @@
+/* 全局应用样式 */
+.app {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+/* 视图切换器样式 */
+.view-switcher {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.switch-btn {
+  padding: 0.75rem 2rem;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.switch-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.switch-btn.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: white;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .view-switcher {
+    padding: 0.5rem;
+  }
+
+  .switch-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}

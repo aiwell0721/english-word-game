@@ -1,0 +1,176 @@
+/* 拼写游戏样式 */
+
+.spelling-game-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.game-header {
+  background: white;
+  border-radius: 16px;
+  padding: 20px 32px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.score-info {
+  display: flex;
+  gap: 24px;
+}
+
+.score-info .score {
+  font-size: 20px;
+  font-weight: bold;
+  color: #667eea;
+}
+
+.score-info .completed {
+  font-size: 16px;
+  color: #666;
+}
+
+.level-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.game-main {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+.word-display {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.word-meaning {
+  font-size: 36px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.word-phonetic {
+  font-size: 20px;
+  color: #667eea;
+  margin-bottom: 8px;
+}
+
+.word-category {
+  font-size: 14px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.input-section {
+  margin-bottom: 32px;
+}
+
+.word-input {
+  width: 100%;
+  padding: 16px 24px;
+  font-size: 24px;
+  border: 3px solid #e5e7eb;
+  border-radius: 12px;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.word-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.word-input:disabled {
+  background: #f5f7fa;
+  cursor: not-allowed;
+}
+
+.feedback-message {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.feedback-message .correct {
+  color: #10b981;
+}
+
+.feedback-message .wrong {
+  color: #ef4444;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.action-btn {
+  padding: 14px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.action-btn.check {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.action-btn.check:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.action-btn.hint {
+  background: #f59e0b;
+  color: white;
+}
+
+.action-btn.hint:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+.action-btn.skip {
+  background: #6b7280;
+  color: white;
+}
+
+.action-btn.skip:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.4);
+}
+
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.loading, .no-word {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #666;
+}

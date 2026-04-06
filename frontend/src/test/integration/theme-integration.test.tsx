@@ -1,6 +1,7 @@
+import React from 'react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, waitFor, fireEvent, cleanup } from '@testing-library/react'
-import { ThemeManager } from '../components/User/ThemeManager'
+import { ThemeManager } from '../../components/User/ThemeManager'
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -299,7 +300,8 @@ describe('集成测试: 主题系统', () => {
           json: () => Promise.resolve({ success: true, data: [] }),
         })
       }
-    })
+    }))
+
     const root = document.documentElement
 
     render(<ThemeManager />)

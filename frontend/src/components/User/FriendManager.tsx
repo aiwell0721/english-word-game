@@ -24,7 +24,7 @@ interface SearchResult {
 
 export const FriendManager: React.FC = () => {
   const [friends, setFriends] = useState<Friend[]>([]);
-  const [pendingRequests, set]endingRequests] = useState<PendingRequest[]>([]);
+  const [pendingRequests, setPendingRequests] = useState<PendingRequest[]>([]);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
@@ -66,7 +66,7 @@ export const FriendManager: React.FC = () => {
       });
 
       const data = await response.json();
-      if (data.success) setendingRequests(data.data);
+      if (data.success) setPendingRequests(data.data);
     } catch (error) {
       console.error('Failed to load pending requests:', error);
     }

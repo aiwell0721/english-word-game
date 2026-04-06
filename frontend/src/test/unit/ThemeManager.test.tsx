@@ -1,6 +1,7 @@
+import React from 'react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, waitFor, fireEvent, cleanup } from '@testing-library/react'
-import { ThemeManager } from '../components/User/ThemeManager'
+import { ThemeManager } from '../../components/User/ThemeManager'
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -203,7 +204,7 @@ describe('BUG-008: 主题切换后有短暂白屏', () => {
     expect(root.style.getPropertyValue('--primary_color')).toBe('#667eea')
 
     // 点击激活第二个主题
-    const activateButtons = screen.getAllByText('' 激活)
+    const activateButtons = screen.getAllByText('激活')
     if (activateButtons.length > 0) {
       fireEvent.click(activateButtons[0])
     }
@@ -318,7 +319,7 @@ describe('BUG-008: 主题切换后有短暂白屏', () => {
       expect(screen.getByText('暗黑主题')).toBeInTheDocument()
     })
 
-    const activateButtons = screen.getAllByText('' 激活')
+    const activateButtons = screen.getAllByText('✅ 激活')
     const initialCallCount = callCount
 
     // 快速点击两次

@@ -1,6 +1,7 @@
+import React from 'react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, waitFor, fireEvent, cleanup } from '@testing-library/react'
-import { GamificationDashboard } from '../components/User/GamificationDashboard'
+import { GamificationDashboard } from '../../components/User/GamificationDashboard'
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -44,7 +45,7 @@ describe('BUG-004: 成就弹窗重叠', () => {
             success: true,
             data: [
               { id: 1, name: '首次学习', description: '完成第一个单词', icon: '🎉', points_reward: 10, unlocked: true, unlocked_at: '2026-04-04T10:00:00' },
-              { id: 2, name: '学习达人', description: '学习100个单词', icon: '🏆', points_reward: 50, unlocked: false },
+              { id: 2, name: '学习达人', description: '学习 100 个单词', icon: '🏆', points_reward: 50, unlocked: false },
             ],
           }),
         })
@@ -64,14 +65,14 @@ describe('BUG-004: 成就弹窗重叠', () => {
 
   it('快速解锁多个成就时按队列显示', async () => {
     const mockFetch = vi.stubGlobal('fetch', vi.fn().mockImplementation((url) => {
-      if (url.includes'achievements/my')) {
+      if (url.includes('achievements/my')) {
         return Promise.resolve({
           json: () => Promise.resolve({
             success: true,
             data: [
-              { id: 1, name: '成就1', description: '描述1', icon: '🎉', points_reward: 10, unlocked: true },
-              { id: 2, name: '成就2', description: '描述2', icon: '🏆', { points_reward: 20, unlocked: true },
-              { id: 3, name: '成就3', description: '描述3', icon: '⭐', points_reward: 30, unlocked: true },
+              { id: 1, name: '成就 1', description: '描述 1', icon: '🎉', points_reward: 10, unlocked: true },
+              { id: 2, name: '成就 2', description: '描述 2', icon: '🏆', points_reward: 20, unlocked: true },
+              { id: 3, name: '成就 3', description: '描述 3', icon: '⭐', points_reward: 30, unlocked: true },
             ],
           }),
         })
@@ -90,7 +91,7 @@ describe('BUG-004: 成就弹窗重叠', () => {
     })
   })
 
-  it('弹窗显示间隔约0.5秒 fanc, () => {
+  it('弹窗显示间隔约 0.5 秒', async () => {
     vi.useFakeTimers()
     const mockFetch = vi.stubGlobal('fetch', vi.fn().mockImplementation((url) => {
       if (url.includes('achievements/my')) {
@@ -98,8 +99,8 @@ describe('BUG-004: 成就弹窗重叠', () => {
           json: () => Promise.resolve({
             success: true,
             data: [
-              { id: 1, name: '成就1', description: '描述1', icon: '🎉', points_reward: 10, unlocked: true },
-              { id: 2, name: '成就2', description: '描述2', icon: '🏆', points_reward: 20, unlocked: true },
+              { id: 1, name: '成就 1', description: '描述 1', icon: '🎉', points_reward: 10, unlocked: true },
+              { id: 2, name: '成就 2', description: '描述 2', icon: '🏆', points_reward: 20, unlocked: true },
             ],
           }),
         })
@@ -114,15 +115,15 @@ describe('BUG-004: 成就弹窗重叠', () => {
 
     // 等待第一个成就弹窗出现
     await waitFor(() => {
-      expect(screen.getByText('成就1')).toBeInTheDocument()
+      expect(screen.getByText('成就 1')).toBeInTheDocument()
     })
 
-    // 快进500ms
+    // 快进 500ms
     vi.advanceTimersByTime(500)
 
     // 等待第二个成就弹窗出现
     await waitFor(() => {
-      expect(screen.getByText('成就2')).toBeInTheDocument()
+      expect(screen.getByText('成就 2')).toBeInTheDocument()
     })
   })
 
@@ -134,8 +135,8 @@ describe('BUG-004: 成就弹窗重叠', () => {
           json: () => Promise.resolve({
             success: true,
             data: [
-              { id: 1, name: '成就1', description: '描述1', icon: '🎉', points_reward: 10, unlocked: true },
-              { id: 2, name: '成就2', description: '描述2', icon: '🏆', points_reward: 20, unlocked: true },
+              { id: 1, name: '成就 1', description: '描述 1', icon: '🎉', points_reward: 10, unlocked: true },
+              { id: 2, name: '成就 2', description: '描述 2', icon: '🏆', points_reward: 20, unlocked: true },
             ],
           }),
         })
@@ -149,7 +150,7 @@ describe('BUG-004: 成就弹窗重叠', () => {
     render(<GamificationDashboard />)
 
     await waitFor(() => {
-      expect(screen.getByText('成就1')).toBeInTheDocument()
+      expect(screen.getByText('成就 1')).toBeInTheDocument()
     })
 
     const closeButtons = screen.getAllByText('太棒了！')
@@ -157,11 +158,11 @@ describe('BUG-004: 成就弹窗重叠', () => {
       fireEvent.click(closeButtons[0])
     }
 
-    // 快进500ms后检查第二个成就
+    // 快进 500ms 后检查第二个成就
     vi.advanceTimersByTime(500)
 
     await waitFor(() => {
-      expect(screen.getByText('成就2')).toBeInTheDocument()
+      expect(screen.getByText('成就 2')).toBeInTheDocument()
     })
   })
 

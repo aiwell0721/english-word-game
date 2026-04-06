@@ -67,7 +67,8 @@ class AchievementQueue {
     this.process();
   }
 }
-[\nexport const GamificationDashboard: React.FC = () => {
+
+export const GamificationDashboard: React.FC = () => {
   const [pointsInfo, setPointsInfo] = useState<PointsInfo | null>(null);
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [dailyTasks, setDailyTasks] = useState<DailyTask[]>([]);

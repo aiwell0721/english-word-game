@@ -27,7 +27,7 @@ db = SQLAlchemy(app)
 class Word(db.Model):
     """词汇表"""
     __tablename__ = 'words'
-    
+
     id = db.Column(db.Integer, primary_key=True)
     word = db.Column(db.String(100), nullable=False)
     phonetic = db.Column(db.String(50))
@@ -39,7 +39,7 @@ class Word(db.Model):
     example = db.Column(db.Text)
     example_translation = db.Column(db.Text)
 
-# Level 1 词汇（100个）- 一年级
+# Level 1 词汇(100个)- 一年级
 LEVEL_1_WORDS = [
     # 颜色
     {"word": "red", "phonetic": "red", "meaning": "红色", "level": 1, "category": "colors"},
@@ -49,7 +49,7 @@ LEVEL_1_WORDS = [
     {"word": "orange", "phonetic": "ˈɔːrɪndʒ", "meaning": "橙色", "level": 1, "category": "colors"},
     {"word": "black", "phonetic": "blæk", "meaning": "黑色", "level": 1, "category": "colors"},
     {"word": "white", "phonetic": "waɪt", "meaning": "白色", "level": 1, "category": "colors"},
-    
+
     # 数字
     {"word": "one", "phonetic": "wʌn", "meaning": "一", "level": 1, "category": "numbers"},
     {"word": "two", "phonetic": "tuː", "meaning": "二", "level": 1, "category": "numbers"},
@@ -61,7 +61,7 @@ LEVEL_1_WORDS = [
     {"word": "eight", "phonetic": "eɪt", "meaning": "八", "level": 1, "category": "numbers"},
     {"word": "nine", "phonetic": "naɪn", "meaning": "九", "level": 1, "category": "numbers"},
     {"word": "ten", "phonetic": "ten", "meaning": "十", "level": 1, "category": "numbers"},
-    
+
     # 动物
     {"word": "cat", "phonetic": "kæt", "meaning": "猫", "level": 1, "category": "animals"},
     {"word": "dog", "phonetic": "dɔːɡ", "meaning": "狗", "level": 1, "category": "animals"},
@@ -73,7 +73,7 @@ LEVEL_1_WORDS = [
     {"word": "cow", "phonetic": "kaʊ", "meaning": "牛", "level": 1, "category": "animals"},
     {"word": "horse", "phonetic": "hɔːs", "meaning": "马", "level": 1, "category": "animals"},
     {"word": "sheep", "phonetic": "ʃiːp", "meaning": "绵羊", "level": 1, "category": "animals"},
-    
+
     # 食物
     {"word": "apple", "phonetic": "ˈæpl", "meaning": "苹果", "level": 1, "category": "food"},
     {"word": "banana", "phonetic": "bəˈnɑːnə", "meaning": "香蕉", "level": 1, "category": "food"},
@@ -85,7 +85,7 @@ LEVEL_1_WORDS = [
     {"word": "rice", "phonetic": "raɪs", "meaning": "米饭", "level": 1, "category": "food"},
     {"word": "water", "phonetic": "ˈwɔːtər", "meaning": "水", "level": 1, "category": "food"},
     {"word": "juice", "phonetic": "dʒuːs", "meaning": "果汁", "level": 1, "category": "food"},
-    
+
     # 家庭
     {"word": "father", "phonetic": "ˈfɑːðər", "meaning": "父亲", "level": 1, "category": "family"},
     {"word": "mother", "phonetic": "ˈmʌðər", "meaning": "母亲", "level": 1, "category": "family"},
@@ -93,7 +93,7 @@ LEVEL_1_WORDS = [
     {"word": "brother", "phonetic": "ˈbrʌðər", "meaning": "兄弟", "level": 1, "category": "family"},
     {"word": "baby", "phonetic": "ˈbeɪbi", "meaning": "婴儿", "level": 1, "category": "family"},
     {"word": "family", "phonetic": "ˈfæmɪli", "meaning": "家庭", "level": 1, "category": "family"},
-    
+
     # 学校
     {"word": "book", "phonetic": "bʊk", "meaning": "书", "level": 1, "category": "school"},
     {"word": "pen", "phonetic": "pen", "meaning": "钢笔", "level": 1, "category": "school"},
@@ -103,7 +103,7 @@ LEVEL_1_WORDS = [
     {"word": "school", "phonetic": "skuːl", "meaning": "学校", "level": 1, "category": "school"},
     {"word": "class", "phonetic": "klæs", "meaning": "班级", "level": 1, "category": "school"},
     {"word": "student", "phonetic": "ˈstjuːdnt", "meaning": "学生", "level": 1, "category": "school"},
-    
+
     # 身体
     {"word": "head", "phonetic": "hed", "meaning": "头", "level": 1, "category": "body"},
     {"word": "hand", "phonetic": "hænd", "meaning": "手", "level": 1, "category": "body"},
@@ -116,7 +116,7 @@ LEVEL_1_WORDS = [
     {"word": "leg", "phonetic": "leɡ", "meaning": "腿", "level": 1, "category": "body"},
 ]
 
-# Level 2 词汇（200个）- 二年级
+# Level 2 词汇(200个)- 二年级
 LEVEL_2_WORDS = [
     # 自然
     {"word": "sun", "phonetic": "sʌn", "meaning": "太阳", "level": 2, "category": "nature"},
@@ -129,7 +129,7 @@ LEVEL_2_WORDS = [
     {"word": "tree", "phonetic": "triː", "meaning": "树", "level": 2, "category": "nature"},
     {"word": "flower", "phonetic": "ˈflaʊər", "meaning": "花", "level": 2, "category": "nature"},
     {"word": "grass", "phonetic": "ɡræs", "meaning": "草", "level": 2, "category": "nature"},
-    
+
     # 职业
     {"word": "doctor", "phonetic": "ˈdɒktər", "meaning": "医生", "level": 2, "category": "jobs"},
     {"word": "teacher", "phonetic": "ˈtiːtʃər", "meaning": "老师", "level": 2, "category": "jobs"},
@@ -140,7 +140,7 @@ LEVEL_2_WORDS = [
     {"word": "policeman", "phonetic": "pəˈliːsmən", "meaning": "警察", "level": 2, "category": "jobs"},
     {"word": "singer", "phonetic": "ˈsɪŋər", "meaning": "歌手", "level": 2, "category": "jobs"},
     {"word": "worker", "phonetic": "ˈwɜːkər", "meaning": "工人", "level": 2, "category": "jobs"},
-    
+
     # 交通
     {"word": "car", "phonetic": "kɑːr", "meaning": "汽车", "level": 2, "category": "transport"},
     {"word": "bus", "phonetic": "bʌs", "meaning": "公共汽车", "level": 2, "category": "transport"},
@@ -149,7 +149,7 @@ LEVEL_2_WORDS = [
     {"word": "plane", "phonetic": "pleɪn", "meaning": "飞机", "level": 2, "category": "transport"},
     {"word": "boat", "phonetic": "bəʊt", "meaning": "船", "level": 2, "category": "transport"},
     {"word": "taxi", "phonetic": "ˈtæksi", "meaning": "出租车", "level": 2, "category": "transport"},
-    
+
     # 时间
     {"word": "morning", "phonetic": "ˈmɔːrnɪŋ", "meaning": "早晨", "level": 2, "category": "time"},
     {"word": "afternoon", "phonetic": "ˌæftərˈnuː", "meaning": "下午", "level": 2, "category": "time"},
@@ -158,7 +158,7 @@ LEVEL_2_WORDS = [
     {"word": "today", "phonetic": "təˈdeɪ", "meaning": "今天", "level": 2, "category": "time"},
     {"word": "tomorrow", "phonetic": "təˈmɔːrəʊ", "meaning": "明天", "level": 2, "category": "time"},
     {"word": "yesterday", "phonetic": "ˈjestədeɪ", "meaning": "昨天", "level": 2, "category": "time"},
-    
+
     # 介词
     {"word": "in", "phonetic": "ɪn", "meaning": "在...里面", "level": 2, "category": "prepositions"},
     {"word": "on", "phonetic": "ɒn", "meaning": "在...上面", "level": 2, "category": "prepositions"},
@@ -178,7 +178,7 @@ ADDITIONAL_LEVEL_2_WORDS = [
     {"word": "door", "phonetic": "dɔːr", "meaning": "门", "level": 2, "category": "objects"},
     {"word": "wall", "phonetic": "wɔːl", "meaning": "墙", "level": 2, "category": "objects"},
     {"word": "floor", "phonetic": "flɔːr", "meaning": "地板", "level": 2, "category": "objects"},
-    
+
     # 地点
     {"word": "park", "phonetic": "pɑːrk", "meaning": "公园", "level": 2, "category": "places"},
     {"word": "zoo", "phonetic": "zuː", "meaning": "动物园", "level": 2, "category": "places"},
@@ -187,7 +187,7 @@ ADDITIONAL_LEVEL_2_WORDS = [
     {"word": "bank", "phonetic": "bæŋk", "meaning": "银行", "level": 2, "category": "places"},
     {"word": "library", "phonetic": "ˈlaɪbreri", "meaning": "图书馆", "level": 2, "category": "places"},
     {"word": "cinema", "phonetic": "ˈsɪnəmə", "meaning": "电影院", "level": 2, "category": "places"},
-    
+
     # 食物
     {"word": "rice", "phonetic": "raɪs", "meaning": "米饭", "level": 2, "category": "food"},
     {"word": "noodles", "phonetic": "ˈnuːdlz", "meaning": "面条", "level": 2, "category": "food"},
@@ -196,7 +196,7 @@ ADDITIONAL_LEVEL_2_WORDS = [
     {"word": "fruit", "phonetic": "fruːt", "meaning": "水果", "level": 2, "category": "food"},
     {"word": "vegetable", "phonetic": "ˈvedʒtəbl", "meaning": "蔬菜", "level": 2, "category": "food"},
     {"word": "soup", "phonetic": "suːp", "meaning": "汤", "level": 2, "category": "food"},
-    
+
     # 动词
     {"word": "run", "phonetic": "rʌn", "meaning": "跑", "level": 2, "category": "verbs"},
     {"word": "jump", "phonetic": "dʒʌmp", "meaning": "跳", "level": 2, "category": "verbs"},
@@ -209,11 +209,11 @@ ADDITIONAL_LEVEL_2_WORDS = [
     {"word": "eat", "phonetic": "iːt", "meaning": "吃", "level": 2, "category": "verbs"},
     {"word": "drink", "phonetic": "drɪŋk", "meaning": "喝", "level": 2, "category": "verbs"},
     {"word": "walk", "phonetic": "wɔːk", "meaning": "走路", "level": 2, "category": "verbs"},
-    {"word": "read", "phonetic": "riːd", "meaning": "阅读", "level": 2,但ategory": "verbs"},
+    {"word": "read", "phonetic": "riːd", "meaning": "阅读", "level": 2, "category": "verbs"},
     {"word": "write", "phonetic": "raɪt", "meaning": "写", "level": 2, "category": "verbs"},
     {"word": "listen", "phonetic": "ˈlɪsn", "meaning": "听", "level": 2, "category": "verbs"},
     {"word": "speak", "phonetic": "spiːk", "meaning": "说", "level": 2, "category": "verbs"},
-    
+
     # 情感
     {"word": "happy", "phonetic": "ˈhæpi", "meaning": "快乐", "level": 2, "category": "emotions"},
     {"word": "sad", "phonetic": "sæd", "meaning": "伤心", "level": 2, "category": "emotions"},
@@ -222,7 +222,7 @@ ADDITIONAL_LEVEL_2_WORDS = [
     {"word": "hungry", "phonetic": "ˈhʌŋɡri", "meaning": "饿", "level": 2, "category": "emotions"},
     {"word": "thirsty", "phonetic": "ˈθɜːsti", "meaning": "渴", "level": 2, "category": "emotions"},
     {"word": "scared", "phonetic": "skeəd", "meaning": "害怕", "level": 2, "category": "emotions"},
-    
+
     # 天气
     {"word": "sunny", "phonetic": "ˈsʌni", "meaning": "晴朗", "level": 2, "category": "weather"},
     {"word": "cloudy", "phonetic": "ˈklaʊdi", "meaning": "多云", "level": 2, "category": "weather"},
@@ -235,28 +235,27 @@ ADDITIONAL_LEVEL_2_WORDS = [
 ]
 
 def init_database():
-    """初始化数据库，导入词汇数据"""
+    """初始化数据库,导入词汇数据"""
     with app.app_context():
         # 创建所有表
         db.create_all()
-        
+
         # 清空现有数据
         Word.query.delete()
-        
+
         # 导入Level 1词汇
         for word_data in LEVEL_1_WORDS:
             word = Word(**word_data)
             db.session.add(word)
-        
+
         # 导入Level 2词汇
         for word_data in LEVEL_2_WORDS + ADDITIONAL_LEVEL_2_WORDS:
             word = Word(**word_data)
             db.session.add(word)
-        
+
         db.session.commit()
         print(f"成功导入 {len(LEVEL_1_WORDS) + len(LEVEL_2_WORDS) + len(ADDITIONAL_LEVEL_2_WORDS)} 个词汇到数据库")
-")
-        print("数据库初始化完成！")
+        print("数据库初始化完成!")
 
 if __name__ == '__main__':
     init_database()

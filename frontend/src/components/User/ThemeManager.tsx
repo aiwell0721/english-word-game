@@ -294,7 +294,6 @@ export const ThemeManager: React.FC = () => {
 
       {/* 主题说明 */}
       <div className="theme-info-section">
-">
         <h4>📖 关于主题</h4>
         <ul>
           <li>免费主题：无需积分，直接解锁使用</li>

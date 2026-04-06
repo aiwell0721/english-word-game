@@ -1,6 +1,7 @@
+import React from 'react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, waitFor, fireEvent, cleanup } from '@testing-library/react'
-import { Leaderboard } from '../components/User/Leaderboard'
+import { Leaderboard } from '../../components/User/Leaderboard'
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -21,8 +22,6 @@ Object.defineProperty(global, 'localStorage', { value: localStorageMock })
 describe('BUG-003: 排行榜更新延迟', () => {
   beforeEach(() => {
     vi.useFakeTimers()
-    // Mock fetch
-    vi.stubGlobal('fetch', vi.fn())
   })
 
   afterEach(() => {
@@ -31,8 +30,8 @@ describe('BUG-003: 排行榜更新延迟', () => {
     vi.useRealTimers()
   })
 
-  it('组件加载时调用排行榜API', async () => {
-    const mockFetch = vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+  it('组件加载时调用排行榜 API', async () => {
+    const mockFetch = vi.fn().mockResolvedValue({
       json: () => Promise.resolve({
         success: true,
         data: {
@@ -44,22 +43,24 @@ describe('BUG-003: 排行榜更新延迟', () => {
           my_rank: 1,
         },
       }),
-    }))
+    })
+
+    vi.stubGlobal('fetch', mockFetch)
 
     render(<Leaderboard />)
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContainingContaining('api/gamification/leaderboard'),
+        expect.stringContaining('api/gamification/leaderboard'),
         expect.any(Object)
       )
     })
   })
 
-  it('30秒后自动刷新排行榜', async () => {
+  it('30 秒后自动刷新排行榜', async () => {
     let fetchCount = 0
 
-    vi.stubGlobal('fetch', vi.fn().mockImplementation(() => {
+    const mockFetch = vi.fn().mockImplementation(() => {
       fetchCount++
       return Promise.resolve({
         json: () => Promise.resolve({
@@ -71,25 +72,33 @@ describe('BUG-003: 排行榜更新延迟', () => {
           },
         }),
       })
-    }))
+    })
+
+    vi.stubGlobal('fetch', mockFetch)
 
     render(<Leaderboard />)
 
     await waitFor(() => expect(fetchCount).toBe(1))
 
-    // 快进30秒
+    // 快进 30 秒
     vi.advanceTimersByTime(30000)
 
     await waitFor(() => expect(fetchCount).toBe(2))
   })
 
   it('切换周期时重新加载排行榜', async () => {
-    const mockFetch = vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+    const mockFetch = vi.fn().mockResolvedValue({
       json: () => Promise.resolve({
         success: true,
-        data: { period: 'all', leaderboard: [], my_rank: null },
+        data: {
+          period: 'all',
+          leaderboard: [],
+          my_rank: null,
+        },
       }),
-    }))
+    })
+
+    vi.stubGlobal('fetch', mockFetch)
 
     render(<Leaderboard />)
 
@@ -97,8 +106,11 @@ describe('BUG-003: 排行榜更新延迟', () => {
       expect(mockFetch).toHaveBeenCalledTimes(1)
     })
 
-    const weekButton = screen.getByText('本周')
-    fireEvent.click(weekButton)
+    // 切换周期
+    const weeklyButton = screen.getByText('周榜')
+    if (weeklyButton) {
+      fireEvent.click(weeklyButton)
+    }
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledTimes(2)
@@ -106,12 +118,18 @@ describe('BUG-003: 排行榜更新延迟', () => {
   })
 
   it('切换好友/全服排行榜时重新加载', async () => {
-    const mockFetch = vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+    const mockFetch = vi.fn().mockResolvedValue({
       json: () => Promise.resolve({
         success: true,
-        data: { period: 'all', leaderboard: [], my_rank: null },
+        data: {
+          period: 'all',
+          leaderboard: [],
+          my_rank: null,
+        },
       }),
-    }))
+    })
+
+    vi.stubGlobal('fetch', mockFetch)
 
     render(<Leaderboard />)
 
@@ -119,24 +137,43 @@ describe('BUG-003: 排行榜更新延迟', () => {
       expect(mockFetch).toHaveBeenCalledTimes(1)
     })
 
-    const friendsButton = screen.getByText(/好友排行榜/i)
-    fireEvent.click(friendsButton)
+    // 切换好友榜
+    const friendsButton = screen.getByText('好友榜')
+    if (friendsButton) {
+      fireEvent.click(friendsButton)
+    }
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledTimes(2)
     })
   })
 
-  it('组件卸载时清除定时器', () => {
-    const mockSetInterval = vi.spyOn(global, 'setInterval')
-    const mockClearInterval = vi.spyOn(global, 'clearInterval')
+  it('组件卸载时清除定时器', async () => {
+    const mockFetch = vi.fn().mockResolvedValue({
+      json: () => Promise.resolve({
+        success: true,
+        data: {
+          period: 'all',
+          leaderboard: [],
+          my_rank: null,
+        },
+      }),
+    })
+
+    vi.stubGlobal('fetch', mockFetch)
 
     const { unmount } = render(<Leaderboard />)
 
-    expect(mockSetInterval).toHaveBeenCalled()
+    await waitFor(() => {
+      expect(mockFetch).toHaveBeenCalledTimes(1)
+    })
 
+    // 卸载组件
     unmount()
 
-    expect(mockClearInterval).toHaveBeenCalled()
+    // 快进 30 秒，不应该再调用 fetch
+    vi.advanceTimersByTime(30000)
+
+    expect(mockFetch).toHaveBeenCalledTimes(1)
   })
 })

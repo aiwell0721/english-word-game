@@ -40,7 +40,6 @@ export const getOptimalImageUrl = (baseUrl: string): string => {
  */
 export const preloadImage = (url: string): Promise<void> => {
   return new Promise((resolve, reject) => {
-) => {
     if (!url) {
       resolve();
       return;
@@ -75,29 +74,22 @@ export const getImageSizeStyle = (baseSize: number) => {
   if (dpr >= 3) {
     return {
       width: `${baseSize * 1.5}px`,
-      height: `${baseSize * 1.5}px`,
-      maxWidth: '100%',
       height: 'auto',
-      imageRendering: '-webkit-optimize-contrast' as any,
-      imageRendering: 'optimize-contrast' as any,
+      maxWidth: '100%',
       imageRendering: 'crisp-edges' as any,
     };
   } else if (dpr >= 2) {
     return {
       width: `${baseSize * 1.2}px`,
-      height: `${baseSize * 1.2}px`,
-      maxWidth: '100%',
       height: 'auto',
-      imageRendering: '-webkit-optimize-contrast' as any,
-      imageRendering: 'optimize-contrast' as any,
+      maxWidth: '100%',
       imageRendering: 'crisp-edges' as any,
     };
   } else {
     return {
       width: `${baseSize}px`,
-      height: `${baseSize}px`,
-      maxWidth: '100%',
       height: 'auto',
+      maxWidth: '100%',
     };
   }
 };

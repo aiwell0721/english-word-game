@@ -1,7 +1,8 @@
+import React from 'react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, waitFor, fireEvent, cleanup } from '@testing-library/react'
-import { Leaderboard } from '../components/User/Leaderboard'
-import { GamificationDashboard } from '../components/User/GamificationDashboard'
+import { Leaderboard } from '../../components/User/Leaderboard'
+import { GamificationDashboard } from '../../components/User/GamificationDashboard'
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -53,17 +54,18 @@ describe('集成测试: 游戏化系统', () => {
             success: true,
             message: 'Added 10 points',
           }),
-: () => Promise.resolve({
-            json: () => Promise.resolve({
-              success: true,
-              data: {
-                total_points: 110,
-                daily_points: 20,
-                level: 2,
-                experience: 1500,
-                streak: 8,
-              },
-            }),
+        })
+      } else if (url.includes('points')) {
+        return Promise.resolve({
+          json: () => Promise.resolve({
+            success: true,
+            data: {
+              total_points: 110,
+              daily_points: 20,
+              level: 2,
+              experience: 1500,
+              streak: 8,
+            },
           }),
         })
       } else if (url.includes('achievements/my')) {

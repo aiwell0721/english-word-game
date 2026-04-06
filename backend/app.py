@@ -1364,7 +1364,7 @@ def get_weekly_report():
 
         if not report:
             # 生成实时周报
-            result = = conn.execute(db.text('''
+            result = conn.execute(db.text('''
                 SELECT COUNT(*) as total_days,
                        SUM(total_time) as total_time,
                        SUM(words_learned) as total_words,

@@ -1,0 +1,449 @@
+/* 智能复习样式 */
+
+.smart-review {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+/* 顶部统计 */
+.review-header {
+  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+  padding: 30px;
+  border-radius: 12px;
+  color: white;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.review-header h2 {
+  margin: 0 0 20px 0;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.stat-value {
+  display: block;
+  font-size: 2em;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.9em;
+  opacity: 0.9;
+  margin-top: 5px;
+}
+
+/* 进度条 */
+.progress-container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+  flex: 1;
+  height: 12px;
+  background: #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4ecdc4 0%, #44a08d 100%);
+  transition: width 0.3s ease;
+  border-radius: 6px;
+}
+
+.progress-text {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #44a08d;
+  min-width: 80px;
+  text-align: right;
+}
+
+/* 复习卡片 */
+.review-card {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.stage-badge,
+.level-badge,
+.interval-badge {
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 0.9em;
+  font-weight: 600;
+  color: white;
+}
+
+.stage-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.level-badge {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.interval-badge {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.card-content {
+  text-align: center;
+}
+
+.word-text {
+  font-size: 3em;
+  font-weight: bold;
+  color: #333;
+  margin: 0 0 20px 0;
+}
+
+.show-answer-btn {
+  background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 10px;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.show-answer-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(78, 205, 196, 0.3);
+}
+
+.meaning-section {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.word-meaning {
+  font-size: 1.5em;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  background: #f9fafb;
+  padding: 20px;
+  border-radius: 10px;
+  border-left: 4px solid #4ecdc4;
+}
+
+.answer-section {
+  margin-top: 20px;
+}
+
+.answer-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.answer-btn {
+  flex: 1;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  max-width: 200px;
+}
+
+.answer-btn.correct {
+  background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+  color: white;
+}
+
+.answer-btn.correct:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(86, 171, 47, 0.4);
+}
+
+.answer-btn.incorrect {
+  background: linear-gradient(135deg, #dc2626 0%, #b82e2e 100%);
+  color: white;
+}
+
+.answer-btn.incorrect:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+}
+
+.result-badge {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1.3em;
+  font-weight: bold;
+  margin-top: 20px;
+  background: #333;
+  color: white;
+}
+
+.card-actions {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.skip-btn {
+  background: #9ca3af;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.skip-btn:hover {
+  background: #7b8392;
+  transform: translateY(-2px);
+}
+
+/* 完成消息 */
+.completion-message {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.completion-icon {
+  font-size: 4em;
+  margin-bottom: 20px;
+}
+
+.completion-message h3 {
+  font-size: 2em;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.completion-message p {
+  font-size: 1.2em;
+  color: #666;
+  margin: 0 0 20px 0;
+}
+
+.completion-stats {
+  background: #f9fafb;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.completion-stats p {
+  font-size: 1em;
+  color: #555;
+  margin: 10px 0;
+}
+
+.completion-stats strong {
+  color: #44a08d;
+}
+
+.restart-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 10px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.restart-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* 艾宾浩斯曲线说明 */
+.curve-info {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  margin-top: 20px;
+  border-left: 4px solid #44a08d;
+}
+
+.curve-info h4 {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.curve-info p {
+  font-size: 1em;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.curve-info ul {
+  list-style: none;
+  padding-left: 20px;
+}
+
+.curve-info li {
+  font-size: 0.95em;
+  color: #555;
+  line-height: 1.8;
+  position: relative;
+  padding-left: 25px;
+}
+
+.curve-info li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #44a08d;
+  font-weight: bold;
+}
+
+/* 加载状态 */
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 1.2em;
+  color: #666;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .smart-review {
+    padding: 10px;
+  }
+
+  .review-header {
+    padding: 20px;
+  }
+
+  .review-header h2 {
+    font-size: 1.5em;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .word-text {
+    font-size: 2em;
+  }
+
+  .answer-buttons {
+    flex-direction: column;
+  }
+
+  .answer-btn {
+    max-width: 100%;
+  }
+
+  .curve-info {
+    margin-top: 0;
+  }
+}
+
+/* 动画效果 */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.review-card {
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stage-badge,
+.level-badge,
+.interval-badge {
+  animation: badgeGlow 2s ease-in-out infinite;
+}
+
+@keyframes badgeGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  }
+}

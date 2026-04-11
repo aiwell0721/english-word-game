@@ -466,18 +466,18 @@ def get_user_points():
         conn = db.engine.connect()
 
         # 
-        result = conn.execute(db.text('''
-            SELECT total_points, daily_points, level, experience, streak
-            FROM user_points WHERE user_id = ?
-        '''), (user_id,)).fetchone()
+        result = conn.execute(db.text(
+            '''SELECT total_points, daily_points, level, experience, streak
+            FROM user_points WHERE user_id = :user_id'''),
+            {'user_id': user_id}).fetchone()
 
         if not result:
             # 
-            conn.execute(db.text('''
-                INSERT INTO user_points (user_id, total_points, daily_points, level, experience, streak)
-                VALUES (?, 0, 0, 1, 0, 0)
-            '''), (user_id,))
-            conn.commit()
+            conn.execute(db.text(
+                '''INSERT INTO user_points (user_id, total_points, daily_points, level, experience, streak)
+                VALUES (:user_id, 0, 0, 1, 0, 0)'''),
+                {'user_id': user_id})
+            conn.connection.commit()
             return jsonify({
                 'success': True,
                 'data': {
@@ -592,13 +592,13 @@ def get_my_achievements():
         user_id = get_jwt_identity()
         conn = db.engine.connect()
 
-        result = conn.execute(db.text('''
-            SELECT a.id, a.name, a.description, a.icon, a.points_reward, ua.unlocked_at
+        result = conn.execute(db.text(
+            '''SELECT a.id, a.name, a.description, a.icon, a.points_reward, ua.unlocked_at
             FROM achievements a
-            LEFT JOIN user_achievements ua ON a.id = ua.achievement_id AND ua.user_id = ?
+            LEFT JOIN user_achievements ua ON a.id = ua.achievement_id AND ua.user_id = :user_id
             WHERE a.is_active = 1
-            ORDER BY a.id
-        '''), (user_id,)).fetchall()
+            ORDER BY a.id'''),
+            {'user_id': user_id}).fetchall()
 
         achievements = [{
             'id': row[0],
@@ -726,13 +726,13 @@ def get_leaderboard():
             '''), (month_start, limit)).fetchall()
         else:
             # 
-            result = conn.execute(db.text('''
-                SELECT u.username, up.total_points, up.level, up.streak
+            result = conn.execute(db.text(
+                '''SELECT u.username, up.total_points, up.level, up.streak
                 FROM user_points up
                 JOIN users u ON up.user_id = u.id
                 ORDER BY up.total_points DESC
-                LIMIT ?
-            '''), (limit,)).fetchall()
+                LIMIT :limit'''),
+                {'limit': limit}).fetchall()
 
         leaderboard = [{
             'rank': i + 1,
@@ -899,10 +899,10 @@ def get_daily_tasks():
                    udt.progress, udt.is_completed, udt.completed_at
             FROM daily_tasks dt
             LEFT JOIN user_daily_tasks udt ON dt.id = udt.task_id
-                AND udt.user_id = ? AND udt.date = ?
+                AND udt.user_id = :user_id AND udt.date = :today
             WHERE dt.is_active = 1
             ORDER BY dt.id
-        '''), (user_id, today.isoformat())).fetchall()
+        '''), {'user_id': user_id, 'today': today.isoformat()}).fetchall()
 
         task_list = [{
             'id': row[0],

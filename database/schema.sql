@@ -45,7 +45,6 @@ CREATE TABLE IF NOT EXISTS game_sessions (
     words_count INTEGER,
     correct_count INTEGER,
     started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    completed_at TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
@@ -122,7 +121,9 @@ CREATE TABLE IF NOT EXISTS daily_tasks (
     description TEXT,
     points_reward INTEGER DEFAULT 0,
     task_type TEXT,
-    target_value INTEGER,
+      target_value INTEGER,
+      condition_type TEXT,
+      condition_value INTEGER,
     is_active BOOLEAN DEFAULT 1
 );
 
@@ -132,7 +133,8 @@ CREATE TABLE IF NOT EXISTS user_daily_tasks (
     user_id INTEGER NOT NULL,
     task_id INTEGER NOT NULL,
     progress INTEGER DEFAULT 0,
-    completed BOOLEAN DEFAULT 0,
+    is_completed BOOLEAN DEFAULT 0,
+    completed_at TIMESTAMP,
     claimed BOOLEAN DEFAULT 0,
     date DATE DEFAULT CURRENT_DATE,
     FOREIGN KEY (user_id) REFERENCES users(id),
@@ -268,3 +270,6 @@ INSERT INTO themes (name, description, icon, unlock_condition) VALUES
 ('森林主题', '绿色自然的森林风格', '🌲', 'points:500'),
 ('海洋主题', '蓝色海洋风格', '🌊', 'words_mastered:50'),
 ('太空主题', '探索宇宙的奥秘', '🚀', 'streak:7');
+
+
+

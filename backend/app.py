@@ -18,12 +18,15 @@ import os
 db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'database', 'word_game.db'))
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    'pool_pre_ping': True,
+}
 app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'your-secret-key-change-in-production')
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
 
 # 
 CORS(app, origins='*')
-db = SQLAlchemy(app)
+db = SQLAlchemy(app, use_native_unicode=True)
 jwt = JWTManager(app)
 
 # 
@@ -489,11 +492,11 @@ def get_user_points():
         return jsonify({
             'success': True,
             'data': {
-                'total_points': result[0],
-                'daily_points': result[1],
-                'level': result[2],
-                'experience': result[3],
-                'streak': result[4]
+                'total_points': result[0] if result else 0,
+                'daily_points': result[1] if result else 0,
+                'level': result[2] if result else 1,
+                'experience': result[3] if result else 0,
+                'streak': result[4] if result else 0
             }
         })
     except Exception as e:
@@ -744,7 +747,7 @@ def get_leaderboard():
         if user_id:
             if period == 'week':
                 my_result = conn.execute(db.text('''
-                    SELECT COUNT(*) + 1 FROM (
+                    SELECT COUNT(*) + 1 as rank FROM (
                         SELECT ph.user_id, SUM(ph.points) as period_points
                         FROM point_history ph
                         WHERE ph.created_at >= ?
@@ -759,7 +762,7 @@ def get_leaderboard():
                 my_rank = my_result[0] if my_result else None
             elif period == 'month':
                 my_result = conn.execute(db.text('''
-                    SELECT COUNT(*) + 1 FROM (
+                    SELECT COUNT(*) + 1 as rank FROM (
                         SELECT ph.user_id, SUM(ph.points) as period_points
                         FROM point_history ph
                         WHERE ph.created_at >= ?
@@ -774,7 +777,7 @@ def get_leaderboard():
                 my_rank = my_result[0] if my_result else None
             else:
                 my_result = conn.execute(db.text('''
-                    SELECT COUNT(*) + 1 FROM user_points
+                    SELECT COUNT(*) + 1 as rank FROM user_points
                     WHERE total_points > (SELECT total_points FROM user_points WHERE user_id = ?)
                 '''), (user_id,)).fetchone()
                 my_rank = my_result[0] if my_result else None
@@ -1032,19 +1035,21 @@ def get_wrong_answers():
 
         result = conn.execute(db.text(query), params).fetchall()
 
-        wrong_answers = [{
-            'id': row[0],
-            'word': row[1],
-            'meaning': row[2],
-            'level': row[3],
-            'user_answer': row[4],
-            'correct_answer': row[5],
-            'error_type': row[6],
-            'practice_count': row[7],
-            'mastered': row[8],
-            'first_mistake_at': row[9].isoformat() if row[9] else None,
-            'last_practice_at': row[10].isoformat() if row[10] else None
-        } for row in result]
+        wrong_answers = []
+        for row in result:
+            wrong_answers.append({
+                'id': row['id'],
+                'word': row['word'],
+                'meaning': row['meaning'],
+                'level': row['level'],
+                'user_answer': row['user_answer'],
+                'correct_answer': row['correct_answer'],
+                'error_type': row['error_type'],
+                'practice_count': row['practice_count'],
+                'mastered': row['mastered'],
+                'first_mistake_at': str(row['first_mistake_at']) if row['first_mistake_at'] else None,
+                'last_practice_at': str(row['last_practice_at']) if row['last_practice_at'] else None
+            })
 
         return jsonify({
             'success': True,
@@ -1275,7 +1280,7 @@ def get_checkin_stats():
 
         # 
         streak_result = conn.execute(db.text('''
-            SELECT COUNT(*) FROM learning_checkin
+            SELECT COUNT(*) as streak_count FROM learning_checkin
             WHERE user_id = ?
         '''), (user_id,)).fetchone()
 
@@ -1568,10 +1573,10 @@ def get_active_theme():
         return jsonify({
             'success': True,
             'data': {
-                'id': result[0],
-                'name': result[1],
-                'description': result[2],
-                'css_config': json.loads(result[3])
+                'id': result[0] if result else None,
+                'name': result[1] if result else '',
+                'description': result[2] if result else '',
+                'css_config': json.loads(result[3]) if result and result[3] else {}
             }
         })
     except Exception as e:

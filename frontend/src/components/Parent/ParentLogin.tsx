@@ -11,7 +11,7 @@ export const ParentLogin: React.FC = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = async (e: React.FormEventEvent>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -193,3 +193,5 @@ export const ParentLogin: React.FC = () => {
     </div>
   );
 };
+
+export default ParentLogin;

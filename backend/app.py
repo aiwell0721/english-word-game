@@ -1,6 +1,6 @@
 """
-小学生英语单词学习游戏 - 完整后端API
-Flask RESTful API服务器
+ - API
+Flask RESTful API
 """
 
 from flask import Flask, jsonify, request
@@ -13,7 +13,7 @@ import random
 
 app = Flask(__name__)
 
-# 配置
+# 
 import os
 db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'database', 'word_game.db'))
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
@@ -21,26 +21,26 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'your-secret-key-change-in-production')
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
 
-# 初始化扩展
+# 
 CORS(app, origins='*')
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
 
-# 数据库模型
+# 
 class User(db.Model):
-    """用户表"""
+    """"""
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True)
     password_hash = db.Column(db.String(255), nullable=False)
-    grade_level = db.Column(db.Integer)  # 1-6年级
+    grade_level = db.Column(db.Integer)  # 1-6
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     last_active = db.Column(db.DateTime)
 
 class Word(db.Model):
-    """词汇表"""
+    """"""
     __tablename__ = 'words'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -55,7 +55,7 @@ class Word(db.Model):
     example_translation = db.Column(db.Text)
 
 class LearningRecord(db.Model):
-    """学习记录表"""
+    """"""
     __tablename__ = 'learning_records'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -69,7 +69,7 @@ class LearningRecord(db.Model):
     word = db.relationship('Word', backref='learning_records')
 
 class GameSession(db.Model):
-    """游戏会话表"""
+    """"""
     __tablename__ = 'game_sessions'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -81,24 +81,24 @@ class GameSession(db.Model):
     started_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     completed_at = db.Column(db.DateTime)
 
-# API路由
+# API
 @app.route('/')
 def index():
-    """健康检查端点"""
+    """"""
     return jsonify({
         'status': 'success',
-        'message': '小学生英语单词学习游戏 API',
+        'message': ' API',
         'version': '1.0.0'
     })
 
 @app.route('/api/health')
 def health():
-    """健康检查"""
+    """"""
     return jsonify({'status': 'ok'})
 
 @app.route('/api/words', methods=['GET'])
 def get_words():
-    """获取词汇列表"""
+    """"""
     try:
         level = request.args.get('level', type=int)
         category = request.args.get('category')
@@ -134,7 +134,7 @@ def get_words():
 
 @app.route('/api/words/<int:word_id>', methods=['GET'])
 def get_word(word_id):
-    """获取单个词汇详情"""
+    """"""
     try:
         word = Word.query.get(word_id)
         if not word:
@@ -166,7 +166,7 @@ def get_word(word_id):
 
 @app.route('/api/words/random', methods=['GET'])
 def get_random_word():
-    """获取随机词汇"""
+    """"""
     try:
         level = request.args.get('level', 1, type=int)
 
@@ -199,7 +199,7 @@ def get_random_word():
 
 @app.route('/api/users/register', methods=['POST'])
 def register():
-    """用户注册"""
+    """"""
     try:
         data = request.get_json()
         username = data.get('username')
@@ -207,14 +207,14 @@ def register():
         email = data.get('email')
         grade_level = data.get('grade_level')
 
-        # 简单验证
+        # 
         if not username or not password:
             return jsonify({
                 'success': False,
                 'error': 'Username and password are required'
             }), 400
 
-        # 创建用户（简化版，实际应该使用密码哈希）
+        # 
         user = User(
             username=username,
             password_hash=password,
@@ -224,7 +224,7 @@ def register():
         db.session.add(user)
         db.session.commit()
 
-        # 生成访问令牌
+        # 
         access_token = create_access_token(identity=user.id)
 
         return jsonify({
@@ -249,13 +249,13 @@ def register():
 
 @app.route('/api/users/login', methods=['POST'])
 def login():
-    """用户登录"""
+    """"""
     try:
         data = request.get_json()
         username = data.get('username')
         password = data.get('password')
 
-        # 简化版登录（实际应该验证密码哈希）
+        # 
         user = User.query.filter_by(username=username).first()
         if not user or user.password_hash != password:
             return jsonify({
@@ -263,11 +263,11 @@ def login():
                 'error': 'Invalid username or password'
             }), 401
 
-        # 更新最后活跃时间
+        # 
         user.last_active = db.func.current_timestamp()
         db.session.commit()
 
-        # 生成访问令牌
+        # 
         access_token = create_access_token(identity=user.id)
 
         return jsonify({
@@ -292,7 +292,7 @@ def login():
 @app.route('/api/users/profile', methods=['GET'])
 @jwt_required()
 def get_profile():
-    """获取用户资料"""
+    """"""
     try:
         user_id = get_jwt_identity()
         user = User.query.get(user_id)
@@ -322,7 +322,7 @@ def get_profile():
 @app.route('/api/learning/record', methods=['POST'])
 @jwt_required()
 def record_learning():
-    """记录学习进度"""
+    """"""
     try:
         user_id = get_jwt_identity()
         data = request.get_json()
@@ -336,7 +336,7 @@ def record_learning():
                 'error': 'word_id is required'
             }), 400
 
-        # 创建学习记录
+        # 
         record = LearningRecord(
             user_id=user_id,
             word_id=word_id,
@@ -361,11 +361,11 @@ def record_learning():
 @app.route('/api/learning/stats', methods=['GET'])
 @jwt_required()
 def get_learning_stats():
-    """获取学习统计"""
+    """"""
     try:
         user_id = get_jwt_identity()
 
-        # 获取用户的所有学习记录
+        # 
         records = LearningRecord.query.filter_by(user_id=user_id).all()
 
         total_words = len(set(r.word_id for r in records))
@@ -392,7 +392,7 @@ def get_learning_stats():
 @app.route('/api/game/session', methods=['POST'])
 @jwt_required()
 def create_game_session():
-    """创建游戏会话"""
+    """"""
     try:
         user_id = get_jwt_identity()
         data = request.get_json()
@@ -429,7 +429,7 @@ def create_game_session():
 @app.route('/api/game/session/<int:session_id>/complete', methods=['POST'])
 @jwt_required()
 def complete_game_session(session_id):
-    """完成游戏会话"""
+    """"""
     try:
         session = GameSession.query.get(session_id)
         if not session:
@@ -452,24 +452,24 @@ def complete_game_session(session_id):
             'error': str(e)
         }), 500
 
-# ==================== 游戏化系统 API ====================
+# ====================  API ====================
 
 @app.route('/api/gamification/points', methods=['GET'])
 @jwt_required()
 def get_user_points():
-    """获取用户积分信息"""
+    """"""
     try:
         user_id = get_jwt_identity()
         conn = db.engine.connect()
 
-        # 查询用户积分
+        # 
         result = conn.execute(db.text('''
             SELECT total_points, daily_points, level, experience, streak
             FROM user_points WHERE user_id = ?
         '''), (user_id,)).fetchone()
 
         if not result:
-            # 如果用户没有积分记录，创建一个
+            # 
             conn.execute(db.text('''
                 INSERT INTO user_points (user_id, total_points, daily_points, level, experience, streak)
                 VALUES (?, 0, 0, 1, 0, 0)
@@ -505,7 +505,7 @@ def get_user_points():
 @app.route('/api/gamification/points/add', methods=['POST'])
 @jwt_required()
 def add_points():
-    """添加积分"""
+    """"""
     try:
         user_id = get_jwt_identity()
         data = request.get_json()
@@ -521,7 +521,7 @@ def add_points():
 
         conn = db.engine.connect()
 
-        # 更新用户积分
+        # 
         conn.execute(db.text('''
             INSERT INTO user_points (user_id, total_points, daily_points, level, experience, streak)
             VALUES (?, 0, 0, 1, 0, 0)
@@ -532,7 +532,7 @@ def add_points():
                 updated_at = CURRENT_TIMESTAMP
         '''), (user_id, points, points, points, points))
 
-        # 添加积分历史
+        # 
         conn.execute(db.text('''
             INSERT INTO point_history (user_id, points, reason, related_id)
             VALUES (?, ?, ?, ?)
@@ -553,7 +553,7 @@ def add_points():
 @app.route('/api/gamification/achievements', methods=['GET'])
 @jwt_required()
 def get_achievements():
-    """获取所有成就列表"""
+    """"""
     try:
         conn = db.engine.connect()
         result = conn.execute(db.text('''
@@ -584,7 +584,7 @@ def get_achievements():
 @app.route('/api/gamification/achievements/my', methods=['GET'])
 @jwt_required()
 def get_my_achievements():
-    """获取我的成就列表"""
+    """"""
     try:
         user_id = get_jwt_identity()
         conn = db.engine.connect()
@@ -620,7 +620,7 @@ def get_my_achievements():
 @app.route('/api/gamification/achievements/unlock', methods=['POST'])
 @jwt_required()
 def unlock_achievement():
-    """解锁成就"""
+    """"""
     try:
         user_id = get_jwt_identity()
         data = request.get_json()
@@ -634,7 +634,7 @@ def unlock_achievement():
 
         conn = db.engine.connect()
 
-        # 检查是否已经解锁
+        # 
         existing = conn.execute(db.text('''
             SELECT id FROM user_achievements
             WHERE user_id = ? AND achievement_id = ?
@@ -646,20 +646,20 @@ def unlock_achievement():
                 'error': 'Achievement already unlocked'
             }), 400
 
-        # 解锁成就
+        # 
         conn.execute(db.text('''
             INSERT INTO user_achievements (user_id, achievement_id)
             VALUES (?, ?)
         '''), (user_id, achievement_id))
 
-        # 获取成就奖励
+        # 
         achievement = conn.execute(db.text('''
             SELECT points_reward FROM achievements WHERE id = ?
         '''), (achievement_id,)).fetchone()
 
         if achievement:
             points = achievement[0]
-            # 添加积分
+            # 
             conn.execute(db.text('''
                 INSERT INTO user_points (user_id, total_points, daily_points, level, experience, streak)
                 VALUES (?, 0, 0, 1, 0, 0)
@@ -685,7 +685,7 @@ def unlock_achievement():
 
 @app.route('/api/gamification/leaderboard', methods=['GET'])
 def get_leaderboard():
-    """获取排行榜"""
+    """"""
     try:
         import datetime
         limit = request.args.get('limit', 10, type=int)
@@ -694,9 +694,9 @@ def get_leaderboard():
 
         conn = db.engine.connect()
 
-        # 根据时间周期构建查询
+        # 
         if period == 'week':
-            # 本周积分排行榜
+            # 
             week_start = (datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday())).isoformat()
             result = conn.execute(db.text('''
                 SELECT u.username, SUM(ph.points) as period_points, up.level, up.streak
@@ -709,7 +709,7 @@ def get_leaderboard():
                 LIMIT ?
             '''), (week_start, limit)).fetchall()
         elif period == 'month':
-            # 本月积分排行榜
+            # 
             month_start = datetime.date.today().replace(day=1).isoformat()
             result = conn.execute(db.text('''
                 SELECT u.username, SUM(ph.points) as period_points, up.level, up.streak
@@ -722,7 +722,7 @@ def get_leaderboard():
                 LIMIT ?
             '''), (month_start, limit)).fetchall()
         else:
-            # 总积分排行榜
+            # 
             result = conn.execute(db.text('''
                 SELECT u.username, up.total_points, up.level, up.streak
                 FROM user_points up
@@ -739,7 +739,7 @@ def get_leaderboard():
             'streak': row[3]
         } for i, row in enumerate(result)]
 
-        # 如果提供了user_id，查找用户排名
+        # user_id
         my_rank = None
         if user_id:
             if period == 'week':
@@ -796,7 +796,7 @@ def get_leaderboard():
 @app.route('/api/gamification/leaderboard/friends', methods=['GET'])
 @jwt_required()
 def get_friends_leaderboard():
-    """获取好友排行榜"""
+    """"""
     try:
         import datetime
         user_id = get_jwt_identity()
@@ -805,7 +805,7 @@ def get_friends_leaderboard():
 
         conn = db.engine.connect()
 
-        # 获取好友列表
+        # 
         friends = conn.execute(db.text('''
             SELECT friend_id FROM friendships 
             WHERE user_id = ? OR friend_id = ?
@@ -815,14 +815,14 @@ def get_friends_leaderboard():
             return jsonify({
                 'success': True,
                 'data': {
-                    'message': '还没有添加好友',
+                    'message': '',
                     'leaderboard': []
                 }
             })
 
         friend_ids = [row[0] for row in friends] + [user_id]
 
-        # 根据时间周期构建查询
+        # 
         if period == 'week':
             week_start = (datetime.date.today() - datetime.timedelta(days=datetime.date.today().weekday())).isoformat()
             result = conn.execute(db.text('''
@@ -881,7 +881,7 @@ def get_friends_leaderboard():
 @app.route('/api/gamification/daily-tasks', methods=['GET'])
 @jwt_required()
 def get_daily_tasks():
-    """获取今日任务"""
+    """"""
     try:
         import datetime
         user_id = get_jwt_identity()
@@ -889,7 +889,7 @@ def get_daily_tasks():
 
         conn = db.engine.connect()
 
-        # 获取所有任务
+        # 
         tasks = conn.execute(db.text('''
             SELECT dt.id, dt.name, dt.description, dt.points_reward,
                    dt.condition_type, dt.condition_value,
@@ -927,7 +927,7 @@ def get_daily_tasks():
 @app.route('/api/gamification/daily-tasks/<int:task_id>/progress', methods=['POST'])
 @jwt_required()
 def update_task_progress(task_id):
-    """更新任务进度"""
+    """"""
     try:
         import datetime
         user_id = get_jwt_identity()
@@ -937,7 +937,7 @@ def update_task_progress(task_id):
         today = datetime.date.today()
         conn = db.engine.connect()
 
-        # 检查任务是否存在
+        # 
         task = conn.execute(db.text('''
             SELECT condition_value FROM daily_tasks WHERE id = ?
         '''), (task_id,)).fetchone()
@@ -950,7 +950,7 @@ def update_task_progress(task_id):
 
         condition_value = task[0]
 
-        # 更新或创建任务进度
+        # 
         conn.execute(db.text('''
             INSERT INTO user_daily_tasks (user_id, task_id, progress, date)
             VALUES (?, ?, ?, ?)
@@ -960,7 +960,7 @@ def update_task_progress(task_id):
                 completed_at = CASE WHEN progress + ? >= ? AND is_completed = 0 THEN CURRENT_TIMESTAMP ELSE completed_at END
         '''), (user_id, task_id, progress, today.isoformat(), progress, progress, condition_value, progress, condition_value))
 
-        # 检查是否完成任务
+        # 
         updated = conn.execute(db.text('''
             SELECT is_completed FROM user_daily_tasks
             WHERE user_id = ? AND task_id = ? AND date = ?
@@ -968,7 +968,7 @@ def update_task_progress(task_id):
 
         is_completed = updated[0] if updated else False
 
-        # 如果完成任务，给用户奖励
+        # 
         if is_completed:
             task_info = conn.execute(db.text('''
                 SELECT points_reward FROM daily_tasks WHERE id = ?
@@ -999,12 +999,12 @@ def update_task_progress(task_id):
             'error': str(e)
         }), 500
 
-# ==================== 学习管理系统 API ====================
+# ====================  API ====================
 
 @app.route('/api/learning/wrong-answers', methods=['GET'])
 @jwt_required()
 def get_wrong_answers():
-    """获取错题本"""
+    """"""
     try:
         user_id = get_jwt_identity()
         mastered = request.args.get('mastered', 'false', type=bool)
@@ -1059,7 +1059,7 @@ def get_wrong_answers():
 @app.route('/api/learning/wrong-answers', methods=['POST'])
 @jwt_required()
 def add_wrong_answer():
-    """添加错题"""
+    """"""
     try:
         import datetime
         user_id = get_jwt_identity()
@@ -1077,7 +1077,7 @@ def add_wrong_answer():
 
         conn = db.engine.connect()
 
-        # 获取正确答案
+        # 
         word = conn.execute(db.text('''
             SELECT word FROM words WHERE id = ?
         '''), (word_id,)).fetchone()
@@ -1085,7 +1085,7 @@ def add_wrong_answer():
         if word:
             correct_answer = word[0]
 
-        # 添加或更新错题记录
+        # 
         conn.execute(db.text('''
             INSERT INTO wrong_answers (user_id, word_id, user_answer, correct_answer, error_type)
             VALUES (?, ?, ?, ?, ?)
@@ -1113,7 +1113,7 @@ def add_wrong_answer():
 @app.route('/api/learning/review-ans', methods=['GET'])
 @jwt_required()
 def get_review_plans():
-    """获取今日复习计划"""
+    """"""
     try:
         import datetime
         user_id = get_jwt_identity()
@@ -1159,7 +1159,7 @@ def get_review_plans():
 @app.route('/api/learning/review-ans', methods=['POST'])
 @jwt_required()
 def create_review_plan():
-    """创建复习计划（基于艾宾浩斯遗忘曲线）"""
+    """"""
     try:
         import datetime
         user_id = get_jwt_identity()
@@ -1175,7 +1175,7 @@ def create_review_plan():
 
         conn = db.engine.connect()
 
-        # 查找现有的复习计划
+        # 
         existing = conn.execute(db.text('''
             SELECT stage, interval_days, ease_factor FROM review_plans
             WHERE user_id = ? AND word_id = ?
@@ -1184,16 +1184,16 @@ def create_review_plan():
         today = datetime.date.today()
 
         if existing:
-            # 更新现有计划（SM-2算法）
+            # SM-2
             stage, interval_days, ease_factor = existing
 
             if is_correct:
-                # 答对，间隔增加
+                # 
                 ease_factor = max(1.3, ease_factor + 0.1)
                 interval_days = int(interval_days * ease_factor)
                 stage += 1
             else:
-                # 答错，间隔减少
+                # 
                 ease_factor = max(1.3, ease_factor - 0.2)
                 interval_days = max(1, int(interval_days * 0.5))
                 stage = max(1, stage - 1)
@@ -1213,7 +1213,7 @@ def create_review_plan():
             '''), (next_review_date.isoformat(), stage, interval_days,
                      ease_factor, is_correct, user_id, word_id))
         else:
-            # 创建新计划
+            # 
             if is_correct:
                 interval_days = 1
                 stage = 1
@@ -1248,7 +1248,7 @@ def create_review_plan():
 @app.route('/api/learning/checkin', methods=['GET'])
 @jwt_required()
 def get_checkin_stats():
-    """获取学习打卡统计"""
+    """"""
     try:
         import datetime
         user_id = get_jwt_identity()
@@ -1273,7 +1273,7 @@ def get_checkin_stats():
             'correct_rate': row[4]
         } for row in result]
 
-        # 计算连续学习天数
+        # 
         streak_result = conn.execute(db.text('''
             SELECT COUNT(*) FROM learning_checkin
             WHERE user_id = ?
@@ -1297,7 +1297,7 @@ def get_checkin_stats():
 @app.route('/api/learning/checkin', methods=['POST'])
 @jwt_required()
 def checkin():
-    """学习打卡"""
+    """"""
     try:
         import datetime
         user_id = get_jwt_identity()
@@ -1310,7 +1310,7 @@ def checkin():
         today = datetime.date.today()
         conn = db.engine.connect()
 
-        # 添加或更新打卡记录
+        # 
         conn.execute(db.text('''
             INSERT INTO learning_checkin
             (user_id, checkin_date, total_time, session_count,
@@ -1342,19 +1342,19 @@ def checkin():
 @app.route('/api/learning/weekly-report', methods=['GET'])
 @jwt_required()
 def get_weekly_report():
-    """获取周报"""
+    """"""
     try:
         import datetime
         user_id = get_jwt_identity()
 
-        # 计算本周开始和结束
+        # 
         today = datetime.date.today()
         week_start = today - datetime.timedelta(days=today.weekday())
         week_end = week_start + datetime.timedelta(days=6)
 
         conn = db.engine.connect()
 
-        # 查找本周周报
+        # 
         report = conn.execute(db.text('''
             SELECT total_days, total_time, total_words,
                    correct_count, wrong_count, words_mastered, streak_days
@@ -1363,7 +1363,7 @@ def get_weekly_report():
         '''), (user_id, week_start.isoformat())).fetchone()
 
         if not report:
-            # 生成实时周报
+            # 
             result = conn.execute(db.text('''
                 SELECT COUNT(*) as total_days,
                        SUM(total_time) as total_time,
@@ -1375,7 +1375,7 @@ def get_weekly_report():
 
             total_days, total_time, total_words, total_sessions = result if result else (0, 0, 0, 0)
 
-            # 计算正确率
+            # 
             correct_count = conn.execute(db.text('''
                 SELECT COUNT(*) FROM learning_records
                 WHERE user_id = ? AND learning_time >= ?
@@ -1416,25 +1416,25 @@ def get_weekly_report():
         }), 500
 
 if __name__ == '__main__':
-    # 创建所有表
+    # 
     with app.app_context():
         db.create_all()
 
-    print("✅ 数据库表创建成功")
-    print("🚀 启动Flask服务器...")
-    print("🌐 API端点:")
-    print("  基础端点:")
+    print(" ")
+    print(" Flask...")
+    print(" API:")
+    print("  :")
     print("  - GET  /")
     print("  - GET  /api/health")
-    print("  词汇管理:")
+    print("  :")
     print("  - GET  /api/words")
     print("  - GET  /api/words/<id>")
     print("  - GET  /api/words/random")
-    print("  用户管理:")
+    print("  :")
     print("  - POST /api/users/register")
     print("  - POST /api/users/login")
     print("  - GET  /api/users/profile")
-    print("  学习管理:")
+    print("  :")
     print("  - POST /api/learning/record")
     print("  - GET  /api/learning/stats")
     print("  - GET  /api/learning/wrong-answers")
@@ -1444,10 +1444,10 @@ if __name__ == '__main__':
     print("  - GET  /api/learning/checkin")
     print("  - POST /api/learning/checkin")
     print("  - GET  /api/learning/weekly-report")
-    print("  游戏管理:")
+    print("  :")
     print("  - POST /api/game/session")
     print("  - POST /api/game/session/<id>/complete")
-    print("  游戏化系统:")
+    print("  :")
     print("  - GET  /api/gamification/points")
     print("  - POST /api/gamification/points/add")
     print("  - GET  /api/gamification/achievements")
@@ -1456,7 +1456,7 @@ if __name__ == '__main__':
     print("  - GET  /api/gamification/leaderboard")
     print("  - GET  /api/gamification/daily-tasks")
     print("  - POST /api/gamification/daily-tasks/<id>/progress")
-    print("  家长管理:")
+    print("  :")
     print("  - POST /api/parent/register")
     print("  - POST /api/parent/login")
     print("  - GET  /api/parent/settings")
@@ -1468,11 +1468,11 @@ if __name__ == '__main__':
     print("  - GET  /api/parent/comparison/<child_user_id>")
 
     app.run(host='0.0.0.0', port=5001, debug=True)
-# ==================== 主题皮肤系统 API ====================
+# ====================  API ====================
 
 @app.route('/api/themes', methods=['GET'])
 def get_themes():
-    """获取所有主题列表"""
+    """"""
     try:
         conn = db.engine.connect()
         result = conn.execute(db.text('''
@@ -1505,7 +1505,7 @@ def get_themes():
 @app.route('/api/themes/my', methods=['GET'])
 @jwt_required()
 def get_my_themes():
-    """获取我已解锁的主题"""
+    """"""
     try:
         user_id = get_jwt_identity()
         conn = db.engine.connect()
@@ -1545,7 +1545,7 @@ def get_my_themes():
 @app.route('/api/themes/my/active', methods=['GET'])
 @jwt_required()
 def get_active_theme():
-    """获取当前激活的主题"""
+    """"""
     try:
         user_id = get_jwt_identity()
         conn = db.engine.connect()
@@ -1558,7 +1558,7 @@ def get_active_theme():
         '''), (user_id,)).fetchone()
 
         if not result:
-            # 如果没有激活主题，返回默认主题
+            # 
             result = conn.execute(db.text('''
                 SELECT id, name, description, css_config
                 FROM themes WHERE category = 'free' ORDER BY id LIMIT 1
@@ -1583,12 +1583,12 @@ def get_active_theme():
 @app.route('/api/themes/<int:theme_id>/unlock', methods=['POST'])
 @jwt_required()
 def unlock_theme(theme_id):
-    """解锁主题"""
+    """"""
     try:
         user_id = get_jwt_identity()
         conn = db.engine.connect()
 
-        # 检查主题是否存在
+        # 
         theme = conn.execute(db.text('''
             SELECT name, category, points_cost FROM themes WHERE id = ?
         '''), (theme_id,)).fetchone()
@@ -1599,7 +1599,7 @@ def unlock_theme(theme_id):
                 'error': 'Theme not found'
             }), 404
 
-        # 检查是否已经解锁
+        # 
         existing = conn.execute(db.text('''
             SELECT id FROM user_themes WHERE user_id = ? AND theme_id = ?
         '''), (user_id, theme_id)).fetchone()
@@ -1612,7 +1612,7 @@ def unlock_theme(theme_id):
 
         theme_name, category, points_cost = theme
 
-        # 如果是付费主题，检查积分是否足够
+        # 
         if category == 'premium':
             user_points = conn.execute(db.text('''
                 SELECT total_points FROM user_points WHERE user_id = ?
@@ -1625,7 +1625,7 @@ def unlock_theme(theme_id):
                     'required_points': points_cost
                 }), 400
 
-            # 扣除积分
+            # 
             conn.execute(db.text('''
                 INSERT INTO user_points (user_id, total_points, daily_points, level, experience, streak)
                 VALUES (?, 0, 0, 1, 0, 0)
@@ -1634,13 +1634,13 @@ def unlock_theme(theme_id):
                     updated_at = CURRENT_TIMESTAMP
             '''), (user_id, points_cost))
 
-            # 添加积分历史
+            # 
             conn.execute(db.text('''
                 INSERT INTO point_history (user_id, points, reason, related_id)
                 VALUES (?, ?, ?, ?)
             '''), (user_id, -points_cost, f'Unlock theme: {theme_name}', theme_id))
 
-        # 解锁主题（自动激活第一个免费主题）
+        # 
         conn.execute(db.text('''
             INSERT INTO user_themes (user_id, theme_id, is_active)
             VALUES (?, ?, ?)
@@ -1668,12 +1668,12 @@ def unlock_theme(theme_id):
 @app.route('/api/themes/<int:theme_id>/activate', methods=['POST'])
 @jwt_required()
 def activate_theme(theme_id):
-    """激活主题"""
+    """"""
     try:
         user_id = get_jwt_identity()
         conn = db.engine.connect()
 
-        # 检查是否已解锁该主题
+        # 
         unlocked = conn.execute(db.text('''
             SELECT id FROM user_themes WHERE user_id = ? AND theme_id = ?
         '''), (user_id, theme_id)).fetchone()
@@ -1684,12 +1684,12 @@ def activate_theme(theme_id):
                 'error': 'Theme not unlocked'
             }), 400
 
-        # 取消所有主题的激活状态
+        # 
         conn.execute(db.text('''
             UPDATE user_themes SET is_active = 0 WHERE user_id = ?
         '''), (user_id,))
 
-        # 激活指定主题
+        # 
         conn.execute(db.text('''
             UPDATE user_themes SET is_active = 1 
             WHERE user_id = ? AND theme_id = ?
@@ -1708,12 +1708,12 @@ def activate_theme(theme_id):
             'error': str(e)
         }), 500
 
-# ==================== 多设备同步 API ====================
+# ====================  API ====================
 
 @app.route('/api/sync/upload', methods=['POST'])
 @jwt_required()
 def sync_upload():
-    """上传用户数据到云端"""
+    """"""
     try:
         import json
         user_id = get_jwt_identity()
@@ -1729,19 +1729,19 @@ def sync_upload():
 
         conn = db.engine.connect()
 
-        # 检查是否存在同步数据
+        # 
         existing = conn.execute(db.text('''
             SELECT id, device_id, sync_data, synced_at, version
             FROM user_sync WHERE user_id = ?
         '''), (user_id,)).fetchone()
 
         if existing:
-            # 版本冲突解决：以最新修改时间为准
+            # 
             if 'last_modified' in sync_data:
-                # 解析现有数据
+                # 
                 existing_data = json.loads(existing[2])
                 
-                # 如果上传的数据更新，则覆盖
+                # 
                 if sync_data.get('last_modified') > existing_data.get('last_modified', 0):
                     conn.execute(db.text('''
                         UPDATE user_sync SET
@@ -1758,7 +1758,7 @@ def sync_upload():
                         'version': existing[3] + 1
                     })
                 else:
-                    # 服务器数据更新，返回冲突
+                    # 
                     return jsonify({
                         'success': False,
                         'error': 'Conflict: Server data is newer',
@@ -1766,7 +1766,7 @@ def sync_upload():
                         'client_data': sync_data
                     }), 409
         else:
-            # 创建新同步记录
+            # 
             conn.execute(db.text('''
                 INSERT INTO user_sync (user_id, device_id, sync_data, synced_at, version)
                 VALUES (?, ?, ?, CURRENT_TIMESTAMP, 1)
@@ -1789,13 +1789,13 @@ def sync_upload():
 @app.route('/api/sync/download', methods=['GET'])
 @jwt_required()
 def sync_download():
-    """从云端下载用户数据"""
+    """"""
     try:
         import json
         user_id = get_jwt_identity()
         conn = db.engine.connect()
 
-        # 获取最新的同步数据
+        # 
         result = conn.execute(db.text('''
             SELECT device_id, sync_data, synced_at, version
             FROM user_sync WHERE user_id = ?
@@ -1828,12 +1828,12 @@ def sync_download():
 @app.route('/api/sync/status', methods=['GET'])
 @jwt_required()
 def sync_status():
-    """获取同步状态"""
+    """"""
     try:
         user_id = get_jwt_identity()
         conn = db.engine.connect()
 
-        # 获取所有设备的同步状态
+        # 
         result = conn.execute(db.text('''
             SELECT device_id, synced_at, version
             FROM user_sync WHERE user_id = ?
@@ -1860,12 +1860,12 @@ def sync_status():
             'error': str(e)
         }), 500
 
-# ==================== 好友系统 API ====================
+# ====================  API ====================
 
 @app.route('/api/friends/search', methods=['GET'])
 @jwt_required()
 def search_friends():
-    """搜索用户"""
+    """"""
     try:
         user_id = get_jwt_identity()
         keyword = request.args.get('keyword', '')
@@ -1879,7 +1879,7 @@ def search_friends():
 
         conn = db.engine.connect()
 
-        # 搜索用户（排除自己和已添加的好友）
+        # 
         result = conn.execute(db.text('''
             SELECT id, username, grade_level, created_at
             FROM users
@@ -1916,7 +1916,7 @@ def search_friends():
 @app.route('/api/friends/add', methods=['POST'])
 @jwt_required()
 def add_friend():
-    """添加好友"""
+    """"""
     try:
         user_id = get_jwt_identity()
         data = request.get_json()
@@ -1936,7 +1936,7 @@ def add_friend():
 
         conn = db.engine.connect()
 
-        # 检查是否已经是好友
+        # 
         existing = conn.execute(db.text('''
             SELECT status FROM friendships 
             WHERE (user_id = ? AND friend_id = ?) 
@@ -1956,7 +1956,7 @@ def add_friend():
                     'error': 'Friend request already pending'
                 }), 400
 
-        # 发送好友请求
+        # 
         conn.execute(db.text('''
             INSERT INTO friendships (user_id, friend_id, status)
             VALUES (?, ?, 'pending')
@@ -1978,12 +1978,12 @@ def add_friend():
 @app.route('/api/friends', methods=['GET'])
 @jwt_required()
 def get_friends():
-    """获取好友列表"""
+    """"""
     try:
         user_id = get_jwt_identity()
         conn = db.engine.connect()
 
-        # 获取已接受的好友
+        # 
         result = conn.execute(db.text('''
             SELECT CASE 
                 WHEN f.user_id = ? THEN u2.id 
@@ -2026,12 +2026,12 @@ def get_friends():
 @app.route('/api/friends/pending', methods=['GET'])
 @jwt_required()
 def get_pending_requests():
-    """获取待处理的好友请求"""
+    """"""
     try:
         user_id = get_jwt_identity()
         conn = db.engine.connect()
 
-        # 获取收到的待处理请求
+        # 
         result = conn.execute(db.text('''
             SELECT f.id, u.username, u.grade_level, f.request_at
             FROM friendships f
@@ -2060,12 +2060,12 @@ def get_pending_requests():
 @app.route('/api/friends/<int:request_id>/accept', methods=['POST'])
 @jwt_required()
 def accept_friend_request(request_id):
-    """接受好友请求"""
+    """"""
     try:
         user_id = get_jwt_identity()
         conn = db.engine.connect()
 
-        # 检查请求是否存在且是发给自己的
+        # 
         request_data = conn.execute(db.text('''
             SELECT user_id, friend_id FROM friendships 
             WHERE id = ? AND friend_id = ? AND status = 'pending'
@@ -2079,7 +2079,7 @@ def accept_friend_request(request_id):
 
         requester_id, friend_id = request_data
 
-        # 接受请求（创建双向好友关系）
+        # 
         conn.execute(db.text('''
             UPDATE friendships SET
                 status = 'accepted',
@@ -2087,7 +2087,7 @@ def accept_friend_request(request_id):
             WHERE id = ?
         '''), (request_id,))
 
-        # 创建反向关系（已接受状态）
+        # 
         conn.execute(db.text('''
             INSERT INTO friendships (user_id, friend_id, status, accepted_at)
             VALUES (?, ?, 'accepted', CURRENT_TIMESTAMP)
@@ -2109,12 +2109,12 @@ def accept_friend_request(request_id):
 @app.route('/api/friends/<int:request_id>/reject', methods=['POST'])
 @jwt_required()
 def reject_friend_request(request_id):
-    """拒绝好友请求"""
+    """"""
     try:
         user_id = get_jwt_identity()
         conn = db.engine.connect()
 
-        # 检查请求是否存在且是发给自己的
+        # 
         request_data = conn.execute(db.text('''
             SELECT id FROM friendships 
             WHERE id = ? AND friend_id = ? AND status = 'pending'
@@ -2126,7 +2126,7 @@ def reject_friend_request(request_id):
                 'error': 'Friend request not found'
             }), 404
 
-        # 更新状态为已拒绝
+        # 
         conn.execute(db.text('''
             UPDATE friendships SET status = 'rejected'
             WHERE id = ?
@@ -2148,12 +2148,12 @@ def reject_friend_request(request_id):
 @app.route('/api/friends/<int:friend_id>/remove', methods=['DELETE'])
 @jwt_required()
 def remove_friend(friend_id):
-    """删除好友"""
+    """"""
     try:
         user_id = get_jwt_identity()
         conn = db.engine.connect()
 
-        # 删除双向好友关系
+        # 
         conn.execute(db.text('''
             DELETE FROM friendships 
             WHERE (user_id = ? AND friend_id = ?) 
@@ -2173,12 +2173,12 @@ def remove_friend(friend_id):
             'error': str(e)
         }), 500
 
-# ==================== 社交分享 API ====================
+# ====================  API ====================
 
 @app.route('/api/social/share', methods=['POST'])
 @jwt_required()
 def create_share():
-    """创建社交分享"""
+    """"""
     try:
         user_id = get_jwt_identity()
         data = request.get_json()
@@ -2194,7 +2194,7 @@ def create_share():
 
         conn = db.engine.connect()
 
-        # 保存分享记录
+        # 
         conn.execute(db.text('''
             INSERT INTO social_shares (user_id, share_type, content, platform)
             VALUES (?, ?, ?, ?)
@@ -2202,7 +2202,7 @@ def create_share():
 
         conn.commit()
 
-        # 奖励积分（分享给积分）
+        # 
         conn.execute(db.text('''
             INSERT INTO user_points (user_id, total_points, daily_points, level, experience, streak)
             VALUES (?, 0, 0, 1, 0, 0)
@@ -2213,7 +2213,7 @@ def create_share():
                 updated_at = CURRENT_TIMESTAMP
         '''), (user_id, 3, 3, 3))
 
-        # 添加积分历史
+        # 
         conn.execute(db.text('''
             INSERT INTO point_history (user_id, points, reason)
             VALUES (?, 3, ?)
@@ -2236,7 +2236,7 @@ def create_share():
 @app.route('/api/social/shares', methods=['GET'])
 @jwt_required()
 def get_shares():
-    """获取分享历史"""
+    """"""
     try:
         user_id = get_jwt_identity()
         limit = request.args.get('limit', 10, type=int)
@@ -2270,14 +2270,14 @@ def get_shares():
             'error': str(e)
         }), 500
 
-# ==================== 多设备同步就绪标志 ====================
-# 所有P2阶段功能开发完成！
+# ====================  ====================
+# P2
 
-# ==================== 家长管理系统 API ====================
+# ====================  API ====================
 
 @app.route('/api/parent/register', methods=['POST'])
 def parent_register():
-    """家长注册"""
+    """"""
     try:
         data = request.get_json()
         username = data.get('username')
@@ -2294,18 +2294,18 @@ def parent_register():
 
         conn = db.engine.connect()
 
-        # 创建家长账户
+        # 
         conn.execute(db.text('''
             INSERT INTO parents (username, password_hash, email, relationship)
             VALUES (?, ?, ?, ?)
         '''), (username, password, email, relationship))
 
-        # 获取家长ID
+        # ID
         parent_id = conn.execute(db.text('''
             SELECT last_insert_rowid()
         ''')).fetchone()[0]
 
-        # 如果关联子学生，创建关联
+        # 
         if child_user_id:
             conn.execute(db.text('''
                 INSERT INTO child_students (parent_id, child_user_id, relationship)
@@ -2314,7 +2314,7 @@ def parent_register():
 
         conn.commit()
 
-        # 生成访问令牌
+        # 
         access_token = create_access_token(identity=parent_id)
 
         return jsonify({
@@ -2338,7 +2338,7 @@ def parent_register():
 
 @app.route('/api/parent/login', methods=['POST'])
 def parent_login():
-    """家长登录"""
+    """"""
     try:
         data = request.get_json()
         username = data.get('username')
@@ -2346,7 +2346,7 @@ def parent_login():
 
         conn = db.engine.connect()
 
-        # 查找家长
+        # 
         parent = conn.execute(db.text('''
             SELECT id, username, email, relationship FROM parents
             WHERE username = ? AND password_hash = ?
@@ -2358,14 +2358,14 @@ def parent_login():
                 'error': 'Invalid username or password'
             }), 401
 
-        # 更新最后登录时间
+        # 
         conn.execute(db.text('''
             UPDATE parents SET last_login = CURRENT_TIMESTAMP
             WHERE id = ?
         '''), (parent[0],))
         conn.commit()
 
-        # 生成访问令牌
+        # 
         access_token = create_access_token(identity=parent[0])
 
         return jsonify({
@@ -2390,7 +2390,7 @@ def parent_login():
 @app.route('/api/parent/settings', methods=['GET'])
 @jwt_required()
 def get_parent_settings():
-    """获取家长设置"""
+    """"""
     try:
         parent_id = get_jwt_identity()
         conn = db.engine.connect()
@@ -2403,7 +2403,7 @@ def get_parent_settings():
         '''), (parent_id,)).fetchone()
 
         if not settings:
-            # 创建默认设置
+            # 
             conn.execute(db.text('''
                 INSERT INTO parent_settings (parent_id)
                 VALUES (?)
@@ -2442,14 +2442,14 @@ def get_parent_settings():
 @app.route('/api/parent/settings', methods=['PUT'])
 @jwt_required()
 def update_parent_settings():
-    """更新家长设置"""
+    """"""
     try:
         parent_id = get_jwt_identity()
         data = request.get_json()
 
         conn = db.engine.connect()
 
-        # 构建更新SQL
+        # SQL
         update_fields = []
         params = []
         
@@ -2507,7 +2507,7 @@ def update_parent_settings():
 @app.route('/api/parent/children', methods=['GET'])
 @jwt_required()
 def get_parent_children():
-    """获取家长关联的子学生"""
+    """"""
     try:
         parent_id = get_jwt_identity()
         conn = db.engine.connect()
@@ -2543,7 +2543,7 @@ def get_parent_children():
 @app.route('/api/parent/monitor/<int:child_user_id>', methods=['GET'])
 @jwt_required()
 def get_child_monitor(child_user_id):
-    """获取子学生学习监控数据"""
+    """"""
     try:
         import datetime
         parent_id = get_jwt_identity()
@@ -2552,7 +2552,7 @@ def get_child_monitor(child_user_id):
 
         conn = db.engine.connect()
 
-        # 检查是否有权限监控
+        # 
         permission = conn.execute(db.text('''
             SELECT can_monitor FROM child_students
             WHERE parent_id = ? AND child_user_id = ?
@@ -2564,14 +2564,14 @@ def get_child_monitor(child_user_id):
                 'error': 'Permission denied'
             }), 403
 
-        # 获取今日学习数据
+        # 
         today_learning = conn.execute(db.text('''
             SELECT total_time, words_learned, correct_rate
             FROM learning_checkin
             WHERE user_id = ? AND checkin_date = ?
         '''), (child_user_id, today.isoformat())).fetchone()
 
-        # 获取本周学习数据
+        # 
         week_learning = conn.execute(db.text('''
             SELECT SUM(total_time) as total_time,
                    SUM(words_learned) as total_words,
@@ -2581,13 +2581,13 @@ def get_child_monitor(child_user_id):
             WHERE user_id = ? AND checkin_date >= ?
         '''), (child_user_id, week_start.isoformat())).fetchone()
 
-        # 获取掌握单词数
+        # 
         mastered_words = conn.execute(db.text('''
             SELECT COUNT(DISTINCT word_id) FROM learning_records
             WHERE user_id = ? AND is_correct = 1
         '''), (child_user_id,)).fetchone()
 
-        # 获取错题数
+        # 
         wrong_count = conn.execute(db.text('''
             SELECT COUNT(*) FROM wrong_answers
             WHERE user_id = ? AND mastered = 0
@@ -2623,7 +2623,7 @@ def get_child_monitor(child_user_id):
 @app.route('/api/parent/reports', methods=['GET'])
 @jwt_required()
 def get_parent_reports():
-    """获取家长学习报告"""
+    """"""
     try:
         import datetime
         parent_id = get_jwt_identity()
@@ -2631,7 +2631,7 @@ def get_parent_reports():
 
         conn = db.engine.connect()
 
-        # 获取报告
+        # 
         reports = conn.execute(db.text('''
             SELECT pr.id, u.username as child_name, pr.report_type,
                    pr.report_data, pr.report_date, pr.is_read
@@ -2664,7 +2664,7 @@ def get_parent_reports():
 @app.route('/api/parent/reports/<int:report_id>/read', methods=['POST'])
 @jwt_required()
 def mark_report_read(report_id):
-    """标记报告已读"""
+    """"""
     try:
         parent_id = get_jwt_identity()
         conn = db.engine.connect()
@@ -2689,12 +2689,12 @@ def mark_report_read(report_id):
 @app.route('/api/parent/comparison/<int:child_user_id>', methods=['GET'])
 @jwt_required()
 def get_progress_comparison(child_user_id):
-    """获取子学生进度对比（与同龄人对比）"""
+    """"""
     try:
         parent_id = get_jwt_identity()
         conn = db.engine.connect()
 
-        # 获取子学生掌握单词数
+        # 
         child_mastered = conn.execute(db.text('''
             SELECT COUNT(DISTINCT word_id) FROM learning_records
             WHERE user_id = ? AND is_correct = 1
@@ -2702,7 +2702,7 @@ def get_progress_comparison(child_user_id):
 
         child_mastered_count = child_mastered[0] if child_mastered else 0
 
-        # 获取同年级学生的平均数据
+        # 
         peer_stats = conn.execute(db.text('''
             SELECT AVG(mastered_count) as avg_mastered,
                    MAX(mastered_count) as max_mastered,
@@ -2715,13 +2715,13 @@ def get_progress_comparison(child_user_id):
                     SELECT grade_level FROM users WHERE id = ?
                 )
                 GROUP BY lr.user_id
-            ) peer_stats最
+            ) peer_stats
         '''), (child_user_id,)).fetchone()
 
         if peer_stats and peer_stats[0]:
             avg_mastered, max_mastered, min_mastered = peer_stats
 
-            # 计算百分位
+            # 
             if max_mastered > min_mastered:
                 top_percentile = ((max_mastered - child_mastered_count) / (max_mastered - min_mastered)) * 100
                 bottom_percentile = ((child_mastered_count - min_mastered) / (max_mastered - min_mastered)) * 100
@@ -2739,8 +2739,8 @@ def get_progress_comparison(child_user_id):
                     'peer_min': min_mastered,
                     'top_percentile': top_percentile,
                     'bottom_percentile': bottom_percentile,
-                    'message': f'你的孩子掌握了{child_mastered_count}个单词，' +
-                            f'同年级平均掌握{int(avg_mastered)}个单词'
+                    'message': f'{child_mastered_count}' +
+                            f'{int(avg_mastered)}'
                 }
             })
         else:
@@ -2749,7 +2749,7 @@ def get_progress_comparison(child_user_id):
                 'data': {
                     'child_user_id': child_user_id,
                     'child_mastered': child_mastered_count,
-                    'message': '暂无对比数据'
+                    'message': ''
                 }
             })
     except Exception as e:

@@ -161,9 +161,8 @@ export const ParentDashboard: React.FC = () => {
         {activeTab === 'reports' && (
           <ReportsTab 
             reports={reports}
-)
-          children={children}
-          selectedChild={selectedChild}
+            children={children}
+            selectedChild={selectedChild}
           />
         )}
         {activeTab === 'settings' && (

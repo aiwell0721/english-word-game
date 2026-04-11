@@ -62,7 +62,7 @@ const ImageMatchingGame: React.FC<ImageMatchingGameProps> = ({ level, wordsCount
     }
     
     // 添加错误选项
-    for (let i = 0; i < count - 1; i++)++) {
+    for (let i = 0; i < count - 1; i++) {
       if (i < otherWords.length) {
         options.push(otherWords[i])
       }

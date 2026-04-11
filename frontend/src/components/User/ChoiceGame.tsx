@@ -64,7 +64,7 @@ const ChoiceGame: React.FC<ChoiceGameProps> = ({ level, questionsCount = 5 }) =>
         // 获取所有单词用于生成错误选项
         const allWordsResponse = await fetch(`http://localhost:5000/api/words?level=${level}&limit=20`)
         const allWordsData = await allWordsResponse.json()
-        const allWords =: Word[] = (allWordsData.data || []).filter((w: any) => w.id !== correctWord.id)
+        const allWords: Word[] = (allWordsData.data || []).filter((w: any) => w.id !== correctWord.id)
         
         // 生成选项
         const options = generateOptions(correctWord, allWords, 4)

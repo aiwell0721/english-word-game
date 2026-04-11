@@ -285,7 +285,7 @@ export const SyncManager: React.FC = () => {
             disabled={syncing}
           >
             {syncing ? '⏳ 同步中...' : '🔄 强制同步'}
-          </</button>
+          </button>
         </div>
       </div>
 

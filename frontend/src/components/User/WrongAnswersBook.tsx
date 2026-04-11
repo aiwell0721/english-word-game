@@ -167,7 +167,7 @@ export const WrongAnswersBook: React.FC = () => {
                   </div>
                   <div className="correct-answer">
                     <label>正确答案：</label>
-                    <span className="="correct-text">{answer.correct_answer}</span>
+                    <span className="correct-text">{answer.correct_answer}</span>
                   </div>
                 </div>
                 <div className="error-meta">

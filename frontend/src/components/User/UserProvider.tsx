@@ -20,7 +20,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = async (username: string, password: string, grade_level: number) => {
     setLoading(true)
     try {
-      const response = await fetch('http://localhost:5000/api/users/register', {
+      const response = await fetch('http://localhost:5001/api/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -35,7 +35,21 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const data = await response.json()
       if (data.success) {
         // 注册成功后自动登录
-        await login(username, password)
+        const loginResponse = await fetch('http://localhost:5001/api/users/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username,
+            password
+          }),
+        })
+        const loginData = await loginResponse.json()
+        if (loginData.success) {
+          setUser(loginData.data.user)
+          localStorage.setItem('token', loginData.data.token)
+        }
       } else {
         alert(data.message || '注册失败')
       }
